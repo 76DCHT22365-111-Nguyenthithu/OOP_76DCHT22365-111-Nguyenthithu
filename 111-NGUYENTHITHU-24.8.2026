@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+#include <iomanip> // Dùng để căn chỉnh cột xuất dữ liệu (setw, left)
+
+using namespace std;
+
+class nhanvien {
+private:
+    string hovaten;
+
+public:
+    // Constructor không đối (mặc định)
+    nhanvien() {
+        hovaten = "";
+    }
+
+    // Constructor có đối
+    nhanvien(string ten) {
+        hovaten = ten;
+    }
+
+    // Phương thức in dữ liệu dạng cột
+    void inra(int stt) {
+        cout << left << setw(10) << stt 
+             << left << setw(30) << hovaten << "\n";
+    }
+};
+
+typedef nhanvien nv;
+
+int main() {
+    int n;
+    cout << "Nhap so luong nhan vien: ";
+    cin >> n;
+    cin.ignore(); // Xóa bộ nhớ đệm sau khi nhập số n
+
+    // Khởi tạo mảng động các con trỏ hoặc mảng đối tượng
+    nv *dsnv2 = (nv*)operator new[](n * sizeof(nv)); // Cấp phát vùng nhớ chưa gọi constructor mặc định
+
+    // Nhập n nhân viên sử dụng CONSTRUCTOR CÓ ĐỐI
+    for (int i = 0; i < n; i++) {
+        string ten;
+        cout << "Nhap ho va ten nhan vien thu " << i + 1 << ": ";
+        getline(cin, ten);
+
+        // Khởi tạo đối tượng bằng constructor có đối trực tiếp vào mảng động
+        new (&dsnv2[i]) nv(ten); 
+    }
+
+    // XUẤT DỮ LIỆU THEO CỘT
+    cout << "\n================ DANH SACH NHAN VIEN ================\n";
+    cout << left << setw(10) << "STT" 
+         << left << setw(30) << "Ho va Ten" << "\n";
+    cout << "----------------------------------------------------\n";
+
+    for (int i = 0; i < n; i++) {
+        dsnv2[i].inra(i + 1);
+    }
+
+    // Giải phóng bộ nhớ động
+    for (int i = 0; i < n; i++) {
+        dsnv2[i].~nhanvien(); // Gọi destructor thủ công cho từng phần tử
+    }
+    operator delete[](dsnv2);
+
+    return 0;
+}
