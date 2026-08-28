@@ -1,0 +1,96 @@
+
+#include <iostream> 
+using namespace std;
+
+// ================= CÂU 1: KHAI BÁO LỚP MA TRẬN =================
+class MaTran {
+private:
+    int soHang;           // Khai báo biến nguyên lưu số lượng hàng của ma trận
+    int soCot;            // Khai báo biến nguyên lưu số lượng cột của ma trận
+    int data[100][100];   // Khai báo mảng 2 chiều tối đa 100x100 để lưu trữ các phần tử (các con số) của ma trận
+
+public:
+    
+    // ================= CÂU 2: PHƯƠNG THỨC NHẬP, XUẤT =================
+    
+    // 1. Hàm nhập ma trận
+    void nhap() {
+        cout << "Nhap so hang: "; // In ra màn hình dòng chữ "Nhap so hang: "
+        cin >> soHang;            // Chờ người dùng nhập 1 số từ bàn phím và gán vào biến soHang
+        cout << "Nhap so cot: ";  // In ra màn hình dòng chữ "Nhap so cot: "
+        cin >> soCot;             // Chờ người dùng nhập 1 số từ bàn phím và gán vào biến soCot
+        
+        cout << "Nhap cac phan tu cua ma tran:" << endl; // In thông báo, endl dùng để xuống dòng
+        
+        // Vòng lặp for chạy từ hàng 0 đến hàng cuối cùng (soHang - 1)
+        for (int i = 0; i < soHang; i++) {
+            // Vòng lặp for con chạy từ cột 0 đến cột cuối cùng (soCot - 1) của hàng hiện tại
+            for (int j = 0; j < soCot; j++) {
+                cout << "Phan tu [" << i << "][" << j << "] = "; // In ra vị trí đang nhập, ví dụ: Phan tu [0][0] = 
+                cin >> data[i][j];                               // Lấy số người dùng nhập gán vào đúng vị trí hàng i, cột j trong mảng
+            }
+        }
+    }
+
+    // 2. Hàm xuất ma trận
+    void xuat() {
+        // Vòng lặp chạy qua từng hàng
+        for (int i = 0; i < soHang; i++) {
+            // Vòng lặp chạy qua từng cột của hàng đó
+            for (int j = 0; j < soCot; j++) {
+                cout << data[i][j] << "\t"; // In phần tử tại hàng i, cột j ra màn hình. "\t" là dấu tab để tạo khoảng cách cho đẹp
+            }
+            cout << endl; // Sau khi in xong tất cả các cột của 1 hàng, in lệnh xuống dòng để bắt đầu in hàng tiếp theo
+        }
+    }
+
+    // ================= CÂU 3: KHAI BÁO HÀM BẠN =================
+
+    friend MaTran congMaTran(MaTran m1, MaTran m2); 
+};
+
+MaTran congMaTran(MaTran m1, MaTran m2) {
+    MaTran ketQua;
+    
+    ketQua.soHang = m1.soHang; // Số hàng của kết quả bằng số hàng của m1
+    ketQua.soCot = m1.soCot;   // Số cột của kết quả bằng số cột của m1
+    
+    // Duyệt qua từng vị trí của ma trận
+    for (int i = 0; i < m1.soHang; i++) {
+        for (int j = 0; j < m1.soCot; j++) {
+            // Lấy phần tử của m1 cộng với phần tử của m2 ở cùng vị trí (i,j), sau đó gán vào vị trí (i,j) của ma trận ketQua
+            ketQua.data[i][j] = m1.data[i][j] + m2.data[i][j];
+        }
+    }
+    
+    return ketQua; // Trả về toàn bộ đối tượng ma trận "ketQua" đã tính toán xong
+}
+
+// ================= HÀM CHÍNH CỦA CHƯƠNG TRÌNH =================
+int main() {
+    MaTran mt1;     // Khai báo đối tượng ma trận thứ 1
+    MaTran mt2;     // Khai báo đối tượng ma trận thứ 2
+    MaTran mtTong;  // Khai báo đối tượng ma trận dùng để lưu tổng
+
+    // 1. Thực hiện nhập hai ma trận đồng cấp
+    cout << "--- NHAP MA TRAN 1 ---" << endl; // In dòng thông báo
+    mt1.nhap();                               // Gọi lệnh nhap() của mt1 để người dùng nhập số liệu
+
+    cout << "\n--- NHAP MA TRAN 2 (Luu y: Nhap cung so hang va so cot voi MT 1) ---" << endl; // In dòng thông báo
+    mt2.nhap();                               // Gọi lệnh nhap() của mt2 để người dùng nhập số liệu
+
+    // 2. In ra màn hình hai ma trận ban đầu
+    cout << "\n=> MA TRAN 1 VUA NHAP:" << endl; // In dòng thông báo
+    mt1.xuat();                                 // Gọi lệnh xuat() của mt1 để in ra cấu trúc ma trận 1
+
+    cout << "\n=> MA TRAN 2 VUA NHAP:" << endl; // In dòng thông báo
+    mt2.xuat();                                 // Gọi lệnh xuat() của mt2 để in ra cấu trúc ma trận 2
+
+    // 3. Thực hiện cộng hai ma trận và in kết quả
+    mtTong = congMaTran(mt1, mt2); // Gọi hàm cộng ma trận, truyền mt1 và mt2 vào. Hứng kết quả trả về vào biến mtTong
+
+    cout << "\n=> KET QUA TONG HAI MA TRAN:" << endl; // In dòng thông báo
+    mtTong.xuat();                                    // Gọi lệnh xuat() của mtTong để in ma trận kết quả ra màn hình
+
+    return 0;
+}
