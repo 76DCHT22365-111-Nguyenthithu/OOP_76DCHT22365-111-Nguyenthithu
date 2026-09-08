@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    long long T = 0;
+
+    cout << "Nhap n: ";
+    cin >> n;
+
+    for (int i = 1; i <= n; i++)
+    {
+        T = T + i * (i + 1);
+    }
+
+    cout << "T = " << T;
+
+    return 0;
+}
