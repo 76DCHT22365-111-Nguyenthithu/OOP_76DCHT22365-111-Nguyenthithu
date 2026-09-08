@@ -1,0 +1,28 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    float a, b;
+
+    cout << "Nhap a, b: ";
+    cin >> a >> b;
+
+    if (a != 0)
+    {
+        cout << "Phuong trinh co nghiem x = " << -b / a;
+    }
+    else
+    {
+        if (b == 0)
+        {
+            cout << "Phuong trinh vo so nghiem";
+        }
+        else
+        {
+            cout << "Phuong trinh vo nghiem";
+        }
+    }
+
+    return 0;
+}
