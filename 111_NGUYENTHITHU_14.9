@@ -1,0 +1,120 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// ================= CÂU 1 =================
+class nguoi {
+protected:
+    string hoten;
+    int nsinh;
+public:
+    // --- CÂU 2: Hàm tạo không đối và có đối cho lớp người ---
+    nguoi() {
+        hoten = "";
+        nsinh = 0;
+    }
+    
+    nguoi(string hoten, int nsinh) {
+        this->hoten = hoten;
+        this->nsinh = nsinh;
+    }
+
+    // --- CÂU 2: Hàm nhập, xuất cho lớp người ---
+    void nhap() {
+        cin.ignore(); // Xóa bộ nhớ đệm trước khi nhập chuỗi
+        cout << "Nhap ho ten: ";
+        getline(cin, hoten);
+        cout << "Nhap nam sinh: ";
+        cin >> nsinh;
+    }
+
+    void xuat() {
+        cout << "Ho ten: " << hoten << ", Nam sinh: " << nsinh;
+    }
+};
+
+class SinhVien : public nguoi {
+private:
+    string msv;
+    float dtb;
+public:
+    // --- CÂU 2: Hàm tạo không đối và có đối cho lớp sinh viên ---
+    SinhVien() : nguoi() {
+        msv = "";
+        dtb = 0.0;
+    }
+
+    // Gọi lại hàm tạo có đối của lớp cha (nguoi)
+    SinhVien(string hoten, int nsinh, string msv, float dtb) : nguoi(hoten, nsinh) {
+        this->msv = msv;
+        this->dtb = dtb;
+    }
+
+    // --- CÂU 2: Hàm nhập, xuất cho lớp sinh viên ---
+    void nhap() {
+        nguoi::nhap(); // Gọi hàm nhập của lớp cha
+        cin.ignore();  // Xóa bộ nhớ đệm do 'cin >> nsinh' để lại
+        cout << "Nhap ma sinh vien: ";
+        getline(cin, msv);
+        cout << "Nhap diem trung binh: ";
+        cin >> dtb;
+    }
+
+    void xuat() {
+        nguoi::xuat(); // Gọi hàm xuất của lớp cha
+        cout << ", MSV: " << msv << ", DTB: " << dtb << endl;
+    }
+
+    // Hàm phụ trợ để lấy Điểm trung bình dùng cho việc sắp xếp ở Câu 3
+    float getDtb() {
+        return dtb;
+    }
+};
+
+// ================= HÀM MAIN =================
+int main() {
+    // --- CÂU 2: Chạy thử hàm tạo có đối ---
+    cout << "--- 1. TEST HAM TAO CO DOI ---" << endl;
+    SinhVien dinh("Nguyen Van Dinh", 2004, "SV01", 8.5);
+    dinh.xuat();
+    cout << "------------------------------\n\n";
+
+    // --- CÂU 3: Nhập n sinh viên, sắp xếp giảm dần và in ra màn hình ---
+    int n;
+    cout << "--- 2. NHAP DANH SACH SINH VIEN ---" << endl;
+    cout << "Nhap so luong sinh vien n = ";
+    cin >> n;
+
+    // Cấp phát mảng động chứa n sinh viên
+    SinhVien* ds = new SinhVien[n];
+
+    // Nhập danh sách
+    for (int i = 0; i < n; i++) {
+        cout << "\nNhap thong tin sinh vien thu " << i + 1 << ":" << endl;
+        ds[i].nhap();
+    }
+
+    // Thuật toán Sắp xếp nổi bọt (Bubble Sort) giảm dần theo DTB
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (ds[i].getDtb() < ds[j].getDtb()) {
+                // Hoán vị 2 đối tượng sinh viên
+                SinhVien temp = ds[i];
+                ds[i] = ds[j];
+                ds[j] = temp;
+            }
+        }
+    }
+
+    // In danh sách sau khi sắp xếp
+    cout << "\n--- 3. DANH SACH SAU KHI SAP XEP GIAM DAN THEO DTB ---" << endl;
+    for (int i = 0; i < n; i++) {
+        ds[i].xuat();
+    }
+
+    // Giải phóng bộ nhớ mảng động
+    delete[] ds;
+
+    return 0;
+}
