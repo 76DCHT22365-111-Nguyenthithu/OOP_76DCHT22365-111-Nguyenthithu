@@ -1,0 +1,120 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// ================= CÂU 1 =================
+class nguoi {
+protected:
+    string hoten;
+    int nsinh;
+public:
+    // --- CÂU 2: Hàm t?o không d?i và có d?i cho l?p ngu?i ---
+    nguoi() {
+        hoten = "";
+        nsinh = 0;
+    }
+    
+    nguoi(string hoten, int nsinh) {
+        this->hoten = hoten;
+        this->nsinh = nsinh;
+    }
+
+    // --- CÂU 2: Hàm nh?p, xu?t cho l?p ngu?i ---
+    void nhap() {
+        cin.ignore(); // Xóa b? nh? d?m tru?c khi nh?p chu?i
+        cout << "Nhap ho ten: ";
+        getline(cin, hoten);
+        cout << "Nhap nam sinh: ";
+        cin >> nsinh;
+    }
+
+    void xuat() {
+        cout << "Ho ten: " << hoten << ", Nam sinh: " << nsinh;
+    }
+};
+
+class SinhVien : public nguoi {
+private:
+    string msv;
+    float dtb;
+public:
+    // --- CÂU 2: Hàm t?o không d?i và có d?i cho l?p sinh viên ---
+    SinhVien() : nguoi() {
+        msv = "";
+        dtb = 0.0;
+    }
+
+    // G?i l?i hàm t?o có d?i c?a l?p cha (nguoi)
+    SinhVien(string hoten, int nsinh, string msv, float dtb) : nguoi(hoten, nsinh) {
+        this->msv = msv;
+        this->dtb = dtb;
+    }
+
+    // --- CÂU 2: Hàm nh?p, xu?t cho l?p sinh viên ---
+    void nhap() {
+        nguoi::nhap(); // G?i hàm nh?p c?a l?p cha
+        cin.ignore();  // Xóa b? nh? d?m do 'cin >> nsinh' d? l?i
+        cout << "Nhap ma sinh vien: ";
+        getline(cin, msv);
+        cout << "Nhap diem trung binh: ";
+        cin >> dtb;
+    }
+
+    void xuat() {
+        nguoi::xuat(); // G?i hàm xu?t c?a l?p cha
+        cout << ", MSV: " << msv << ", DTB: " << dtb << endl;
+    }
+
+    // Hàm ph? tr? d? l?y Ði?m trung bình dùng cho vi?c s?p x?p ? Câu 3
+    float getDtb() {
+        return dtb;
+    }
+};
+
+// ================= HÀM MAIN =================
+int main() {
+    // --- CÂU 2: Ch?y th? hàm t?o có d?i ---
+    cout << "--- 1. TEST HAM TAO CO DOI ---" << endl;
+    SinhVien thu("Nguyen Thi Thu", 2007, "SV01", 8.5);
+    thu.xuat();
+    cout << "------------------------------\n\n";
+
+    // --- CÂU 3: Nh?p n sinh viên, s?p x?p gi?m d?n và in ra màn hình ---
+    int n;
+    cout << "--- 2. NHAP DANH SACH SINH VIEN ---" << endl;
+    cout << "Nhap so luong sinh vien n = ";
+    cin >> n;
+
+    // C?p phát m?ng d?ng ch?a n sinh viên
+    SinhVien* ds = new SinhVien[n];
+
+    // Nh?p danh sách
+    for (int i = 0; i < n; i++) {
+        cout << "\nNhap thong tin sinh vien thu " << i + 1 << ":" << endl;
+        ds[i].nhap();
+    }
+
+    // Thu?t toán S?p x?p n?i b?t (Bubble Sort) gi?m d?n theo DTB
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (ds[i].getDtb() < ds[j].getDtb()) {
+                // Hoán v? 2 d?i tu?ng sinh viên
+                SinhVien temp = ds[i];
+                ds[i] = ds[j];
+                ds[j] = temp;
+            }
+        }
+    }
+
+    // In danh sách sau khi s?p x?p
+    cout << "\n--- 3. DANH SACH SAU KHI SAP XEP GIAM DAN THEO DTB ---" << endl;
+    for (int i = 0; i < n; i++) {
+        ds[i].xuat();
+    }
+
+    // Gi?i phóng b? nh? m?ng d?ng
+    delete[] ds;
+
+    return 0;
+}
