@@ -1,0 +1,89 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class monhoc {
+protected:
+    string tenMon;
+    float cc, kt, dt;
+public:
+    void nhap();
+    void xuat();
+    float get_cc(); 
+    float get_kt(); 
+};
+
+class sinhvien : public monhoc {
+private:
+    string hoTen, lop, msv;
+public:
+    void nhap();
+    void xuat();
+    float tinhDiemHP();
+};
+
+void monhoc::nhap() {
+    cout << "Nhap ten mon hoc: ";getline(cin, tenMon);
+    cout << "Nhap diem chuyen can (CC): ";cin >> cc;
+    cout << "Nhap diem kiem tra (KT): ";cin >> kt;
+    cout << "Nhap diem thi (DT): ";cin >> dt;cin.ignore(); 
+}
+
+void monhoc::xuat() {
+    cout << "Mon: " << tenMon << " | CC: " << cc << " | KT: " << kt << " | DT: " << dt;
+}
+
+float monhoc::get_cc() {
+    return cc;
+}
+
+float monhoc::get_kt() {
+    return kt;
+}
+
+void sinhvien::nhap() {
+    cout << "Nhap ho ten sinh vien: "; getline(cin, hoTen);
+    cout << "Nhap lop: ";getline(cin, lop);
+    cout << "Nhap ma sinh vien: ";getline(cin, msv);
+    monhoc::nhap();
+}
+
+void sinhvien::xuat() {
+    cout << "MSV: " << msv << " | Ho ten: " << hoTen << " | Lop: " << lop << endl;
+    monhoc::xuat(); 
+    cout << " | Diem hoc phan: " << tinhDiemHP() << endl;
+}
+
+float sinhvien::tinhDiemHP() {
+    return (cc * 0.1 + kt * 0.3 + dt * 0.6); 
+}
+
+int main() {
+    int n;
+    cout << "Nhap so luong sinh vien: ";cin >> n;cin.ignore();
+
+    sinhvien ds[100];
+
+    cout << "\n--- NHAP THONG TIN ---" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << "\nSinh vien thu " << i + 1 << ":" << endl;
+        ds[i].nhap();
+    }
+
+    cout << "\n--- DANH SACH SINH VIEN BI CAM THI ---" << endl;
+    bool coCamThi = false;
+    for (int i = 0; i < n; i++) {
+        if (ds[i].get_cc() < 5 || ds[i].get_kt() == 0) {
+            ds[i].xuat();
+            cout << "\n----------------------" << endl;
+            coCamThi = true;
+        }
+    }
+
+    if (!coCamThi) {
+        cout << "Khong co sinh vien nao bi cam thi!" << endl;
+    }
+
+    return 0;
+}
