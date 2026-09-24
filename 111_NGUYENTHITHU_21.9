@@ -1,0 +1,112 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int timUCLN(int a, int b) {
+    a = abs(a);
+    b = abs(b);
+    if (a == 0 || b == 0) return a + b;
+    while (a != b) {
+        if (a > b) a -= b;
+        else b -= a;
+    }
+    return a;
+}
+
+
+class PS1 {
+protected: 
+    int tuSo;
+    int mauSo;
+
+public:
+    PS1(int t = 0, int m = 1) : tuSo(t), mauSo(m) {}
+
+    void nhap() {
+        cout << "  Nhap tu so: ";
+        cin >> tuSo;
+        do {
+            cout << "  Nhap mau so (khac 0): ";
+            cin >> mauSo;
+            if (mauSo == 0) {
+                cout << "  -> Loi: Mau so phai khac 0. Vui long nhap lai!" << endl;
+            }
+        } while (mauSo == 0);
+    }
+    
+    void toiGian() {
+        int ucln = timUCLN(tuSo, mauSo);
+        tuSo /= ucln;
+        mauSo /= ucln;
+        
+        if (mauSo < 0) {
+            tuSo = -tuSo;
+            mauSo = -mauSo;
+        }
+    }
+    void in() const {
+        if (tuSo == 0) cout << 0;
+        else if (mauSo == 1) cout << tuSo;
+        else cout << tuSo << "/" << mauSo;
+    }
+};
+
+
+class PS2 : public PS1 {
+public:
+    // Nạp chồng toán tử gán (=)
+    PS2& operator=(const PS2& other) {
+        if (this != &other) { 
+            this->tuSo = other.tuSo;
+            this->mauSo = other.mauSo;
+        }
+        return *this;
+    }
+
+    // Nạp chồng toán tử lớn hơn (>)
+    bool operator>(const PS2& other) const {
+        double giaTri1 = (double)this->tuSo / this->mauSo;
+        double giaTri2 = (double)other.tuSo / other.mauSo;
+        return giaTri1 > giaTri2;
+    }
+};
+
+
+int main() {
+    PS2 ds[10]; 
+    int n;
+    do {
+        cout << "Nhap so luong phan so (toi da 10): ";
+        cin >> n;
+        if (n <= 0 || n > 10) {
+            cout << "So luong khong hop le. Vui long nhap tu 1 den 10." << endl;
+        }
+    } while (n <= 0 || n > 10);
+
+    cout << "\n--- NHAP DANH SACH PHAN SO ---" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << "Phan so thu " << i + 1 << ":" << endl;
+        ds[i].nhap();
+        ds[i].toiGian(); 
+    }
+
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+        
+            if (ds[j] > ds[i]) {
+                PS2 temp = ds[i]; 
+                ds[i] = ds[j];
+                ds[j] = temp;
+            }
+        }
+    }
+
+    cout << "\n--- DANH SACH PHAN SO GIAM DAN ---" << endl;
+    for (int i = 0; i < n; i++) {
+        ds[i].in();
+        cout << "   ";
+    }
+    cout << endl;
+
+    return 0;
+}
