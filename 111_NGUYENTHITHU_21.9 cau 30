@@ -1,0 +1,84 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class SP1 {
+protected: 
+    double thuc; 
+    double ao;   
+
+public:
+    SP1(double t = 0, double a = 0) : thuc(t), ao(a) {}
+    void nhap() {
+        cout << "  Nhap phan thuc: ";
+        cin >> thuc;
+        cout << "  Nhap phan ao: ";
+        cin >> ao;
+    }
+
+    void in() const {
+        if (ao < 0) {
+            cout << thuc << " - " << abs(ao) << "i";
+        } else {
+            cout << thuc << " + " << ao << "i";
+        }
+    }
+
+    double tinhModule() const {
+        return sqrt(thuc * thuc + ao * ao);
+    }
+};
+
+class SP2 : public SP1 {
+public:
+    // Nạp chồng toán tử gán (=)
+    SP2& operator=(const SP2& other) {
+        if (this != &other) { 
+            this->thuc = other.thuc;
+            this->ao = other.ao;
+        }
+        return *this;
+    }
+
+    // Nạp chồng toán tử lớn hơn (>) so sánh theo module
+    bool operator>(const SP2& other) const {
+        return this->tinhModule() > other.tinhModule();
+    }
+};
+
+int main() {
+    SP2 ds[10]; 
+    int n;
+    do {
+        cout << "Nhap so luong so phuc (tu 1 den 10): ";
+        cin >> n;
+        if (n <= 0 || n > 10) {
+            cout << "So luong khong hop le, vui long nhap lai!" << endl;
+        }
+    } while (n <= 0 || n > 10);
+
+    cout << "\n--- NHAP DANH SACH SO PHUC ---" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << "So phuc thu " << i + 1 << ":" << endl;
+        ds[i].nhap();
+    }
+
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (ds[j] > ds[i]) { 
+                SP2 temp = ds[i]; 
+                ds[i] = ds[j];
+                ds[j] = temp;
+            }
+        }
+    }
+
+    cout << "\n--- DANH SACH SO PHUC GIAM DAN THEO MODULE ---" << endl;
+    for (int i = 0; i < n; i++) {
+        ds[i].in();
+        cout << "  (Module: " << ds[i].tinhModule() << ")" << endl;
+    }
+
+    return 0;
+}
+
