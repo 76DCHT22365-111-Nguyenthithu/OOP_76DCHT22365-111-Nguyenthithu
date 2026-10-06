@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <string.h>
+
+// Khai bao cau truc sinh vien
+struct sinhvien
+{
+    char hoten[20];
+    char masv[10];
+    float diem;
+};
+
+int main()
+{
+    int n;
+
+    printf("Nhap n = ");
+    scanf("%d", &n);
+
+    struct sinhvien ds[n];
+
+    // Nhap thong tin cho n sinh vien
+    for(int i = 0; i < n; i++)
+    {
+        fflush(stdin);
+
+        printf("\nNhap hoten: ");
+        gets(ds[i].hoten);
+
+        printf("Nhap msv: ");
+        gets(ds[i].masv);
+
+        printf("Nhap diem: ");
+        scanf("%f", &ds[i].diem);
+    }
+
+    // Xuat thong tin cho n sinh vien
+    printf("\n===== DANH SACH SINH VIEN =====\n");
+
+    for(int i = 0; i < n; i++)
+    {
+        printf("\nHoten:\t%s\n", ds[i].hoten);
+        printf("MSV:\t%s\n", ds[i].masv);
+        printf("Diem:\t%.1f\n", ds[i].diem);
+    }
+
+    return 0;
+}
